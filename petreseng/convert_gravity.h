@@ -11,16 +11,16 @@ namespace petreseng
 template<typename T>
 Specific_gravity<T> to_specific( const Api_gravity<T>& api )
 {
-	T a{static_cast<T>(141.5)};
-	T b{static_cast<T>(131.5)};
+	T a{static_cast<T>(141.5f)};
+	T b{static_cast<T>(131.5f)};
 	return a/(b + api);
 }
 
 template<typename T>
 Api_gravity<T> to_api( const Specific_gravity<T>& g )
 {
-	T a{static_cast<T>(141.5)};
-	T b{static_cast<T>(131.5)};
+	T a{static_cast<T>(141.5f)};
+	T b{static_cast<T>(131.5f)};
 	return (a / g) - b;
 }
 

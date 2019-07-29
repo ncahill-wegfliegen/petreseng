@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\..\gemeinsam\utility\value.h"
+#include "..\..\gemeinsam\math\compare.h"
 #include <type_traits>
 
 namespace nhill
@@ -9,79 +10,44 @@ namespace petreseng
 {
 
 template<typename T>
-class Api_gravity
+struct Api_gravity_validator : public nhill::utility::Value_validator<T>
 {
-	static_assert(std::is_floating_point_v<T>, "The template parameter must a floating point type (float, double of long double).");
+   static_assert(std::is_floating_point_v<T>, "The template parameter must be a floating point type (float, double or long double).");
 
-public:
-	using value_type = T;
-
-	Api_gravity( T = 0 );
-	Api_gravity& operator=( T );
-
-	Api_gravity( const Api_gravity& );
-	Api_gravity& operator=( const Api_gravity& );
-
-	Api_gravity( Api_gravity&& );
-	Api_gravity& operator=( Api_gravity&& );
-
-	~Api_gravity();
-
-	operator T() const;
-
-	T value() const;
-	void value( T );
-
-private:
-	T value_;
+   bool is_valid( T value ) const override;
+   void invalid( T value ) const override;
+   T adjust( T value ) const override;
 };
 
-}
-}
 
 template<typename T>
-inline nhill::petreseng::Api_gravity<T>::Api_gravity( T value )
-	: value_{value}
+class Api_gravity : public nhill::utility::Value<T, Api_gravity_validator<T>>
 {
+   static_assert(std::is_floating_point_v<T>, "The template parameter must be a floating point type (float, double or long double).");
+
+public:
+   using base = nhill::utility::Value<T, Api_gravity_validator<T>>;
+   using base::base;
+};
+
+
+}
 }
 
 template<typename T>
-inline auto nhill::petreseng::Api_gravity<T>::operator=( T value )->Api_gravity &
+inline bool nhill::petreseng::Api_gravity_validator<T>::is_valid( T value ) const
 {
-	this->value( value );
-	return *this;
+   return nhill::math::greater_or_equal<T, uint8_t>( value, 0 );
 }
 
 template<typename T>
-inline nhill::petreseng::Api_gravity<T>::Api_gravity( const Api_gravity& ) = default;
-
-template<typename T>
-inline auto nhill::petreseng::Api_gravity<T>::operator=( const Api_gravity& )->Api_gravity & = default;
-
-template<typename T>
-inline nhill::petreseng::Api_gravity<T>::Api_gravity( Api_gravity&& ) = default;
-
-template<typename T>
-inline auto nhill::petreseng::Api_gravity<T>::operator=( Api_gravity&& )->Api_gravity & = default;
-
-template<typename T>
-inline nhill::petreseng::Api_gravity<T>::~Api_gravity() = default;
-
-template<typename T>
-inline nhill::petreseng::Api_gravity<T>::operator T() const
+inline void nhill::petreseng::Api_gravity_validator<T>::invalid( T value ) const
 {
-	return value();
+   throw std::invalid_argument( "The value " + std::to_string( value ) + " is invalid.  The API gravity must be greater than or equal to zero." );
 }
 
 template<typename T>
-inline T nhill::petreseng::Api_gravity<T>::value() const
+inline T nhill::petreseng::Api_gravity_validator<T>::adjust( T value ) const
 {
-	return value_;
+   return value;
 }
-
-template<typename T>
-inline void nhill::petreseng::Api_gravity<T>::value( T value)
-{
-	value_ = value;
-}
-

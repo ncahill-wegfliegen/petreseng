@@ -1,5 +1,7 @@
 #pragma once
 
+#include "..\..\gemeinsam\utility\value.h"
+#include "..\..\gemeinsam\math\compare.h"
 #include <type_traits>
 
 namespace nhill
@@ -8,79 +10,44 @@ namespace petreseng
 {
 
 template<typename T>
-class Specific_gravity
+struct Specific_gravity_validator : public nhill::utility::Value_validator<T>
 {
-	static_assert(std::is_floating_point_v<T>, "The template parameter must a floating point type (float, double of long double).");
+   static_assert(std::is_floating_point_v<T>, "The template parameter must be a floating point type (float, double or long double).");
 
-public:
-	using value_type = T;
-
-	Specific_gravity( T = 0 );
-	Specific_gravity& operator=( T );
-
-	Specific_gravity( const Specific_gravity& );
-	Specific_gravity& operator=( const Specific_gravity& );
-
-	Specific_gravity( Specific_gravity&& );
-	Specific_gravity& operator=( Specific_gravity&& );
-
-	~Specific_gravity();
-
-	operator T() const;
-
-	T value() const;
-	void value( T );
-
-private:
-	T value_;
+   bool is_valid( T value ) const override;
+   void invalid( T value ) const override;
+   T adjust( T value ) const override;
 };
 
-}
-}
 
 template<typename T>
-inline nhill::petreseng::Specific_gravity<T>::Specific_gravity( T value )
-	: value_{value}
+class Specific_gravity : public nhill::utility::Value<T, Specific_gravity_validator<T>>
 {
+   static_assert(std::is_floating_point_v<T>, "The template parameter must be a floating point type (float, double or long double).");
+
+public:
+   using base = nhill::utility::Value<T, Specific_gravity_validator<T>>;
+   using base::base;
+};
+
+
+}
 }
 
 template<typename T>
-inline auto nhill::petreseng::Specific_gravity<T>::operator=( T value)->Specific_gravity &
+inline bool nhill::petreseng::Specific_gravity_validator<T>::is_valid( T value ) const
 {
-	this->value( value );
-	return *this;
+   return nhill::math::greater_or_equal<T, uint8_t>( value, 0 );
 }
 
 template<typename T>
-inline nhill::petreseng::Specific_gravity<T>::Specific_gravity( const Specific_gravity& ) = default;
-
-template<typename T>
-inline auto nhill::petreseng::Specific_gravity<T>::operator=( const Specific_gravity& )->Specific_gravity & = default;
-
-template<typename T>
-inline nhill::petreseng::Specific_gravity<T>::Specific_gravity( Specific_gravity&& ) = default;
-
-template<typename T>
-inline auto nhill::petreseng::Specific_gravity<T>::operator=( Specific_gravity&& )->Specific_gravity & = default;
-
-template<typename T>
-inline nhill::petreseng::Specific_gravity<T>::~Specific_gravity() = default;
-
-template<typename T>
-inline nhill::petreseng::Specific_gravity<T>::operator T() const
+inline void nhill::petreseng::Specific_gravity_validator<T>::invalid( T value ) const
 {
-	return value();
+   throw std::invalid_argument( "The value " + std::to_string( value ) + " is invalid.  The specific gravity must be greater than or equal to zero." );
 }
 
 template<typename T>
-inline T nhill::petreseng::Specific_gravity<T>::value() const
+inline T nhill::petreseng::Specific_gravity_validator<T>::adjust( T value ) const
 {
-	return value_;
+   return value;
 }
-
-template<typename T>
-inline void nhill::petreseng::Specific_gravity<T>::value( T value)
-{
-	value_ = value;
-}
-

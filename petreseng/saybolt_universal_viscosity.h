@@ -1,7 +1,7 @@
 #pragma once
 
-#include "value.h"
-#include "compare.h"
+#include "..\..\gemeinsam\utility\value.h"
+#include "..\..\gemeinsam\math\compare.h"
 #include <type_traits>
 #include <cstdint>
 
@@ -36,7 +36,7 @@ public:
 template<typename T>
 inline bool nhill::petreseng::Saybolt_universal_viscosity_validator<T>::is_valid( T value ) const
 {
-   return greater_or_equal<T, uint8_t>( value, 0 );
+   return math::greater_or_equal<T, uint8_t>( value, 0 );
 }
 
 template<typename T>

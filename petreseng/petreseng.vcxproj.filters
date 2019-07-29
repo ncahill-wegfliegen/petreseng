@@ -10,17 +10,8 @@
     <ClInclude Include="specific_gravity.h">
       <Filter>gravity</Filter>
     </ClInclude>
-    <ClInclude Include="pnt.h">
-      <Filter>pnt</Filter>
-    </ClInclude>
-    <ClInclude Include="pnt_container.h">
-      <Filter>pnt</Filter>
-    </ClInclude>
     <ClInclude Include="interpolation.h">
       <Filter>interpolation</Filter>
-    </ClInclude>
-    <ClInclude Include="compare.h">
-      <Filter>miscellaneous</Filter>
     </ClInclude>
     <ClInclude Include="viscosity.h">
       <Filter>viscosity</Filter>
@@ -36,14 +27,8 @@
     <Filter Include="gravity">
       <UniqueIdentifier>{907c968c-d388-4d4f-9c6e-f8adfd21e264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="pnt">
-      <UniqueIdentifier>{02c3202d-7b5d-456a-8a69-f184f978d3d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="interpolation">
       <UniqueIdentifier>{db7f9700-8397-4d86-a702-a7e47b4f3259}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="miscellaneous">
-      <UniqueIdentifier>{b1ddfac6-2271-423e-8c36-3471b6bb1189}</UniqueIdentifier>
     </Filter>
     <Filter Include="viscosity">
       <UniqueIdentifier>{b0db1d3f-7ddb-4300-9908-110e3fe95964}</UniqueIdentifier>

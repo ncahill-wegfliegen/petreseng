@@ -2,8 +2,8 @@
 
 #include "kinematic_viscosity.h"
 #include "saybolt_universal_viscosity.h"
-#include "pnt.h"
-#include "pnt_container.h"
+#include "..\..\gemeinsam\geometry\pnt.h"
+#include "..\..\gemeinsam\geometry\pnt_container.h"
 #include "interpolation.h"
 
 namespace nhill
@@ -24,7 +24,7 @@ auto nhill::petreseng::to_saybolt_universal_viscosity( const Kinematic_viscosity
 {
 	// x is the kinematic viscosity
 	// y is the equivalent Saybolt Universal viscosity at 100°F
-   static const Pnt_container<T> pnts
+   static const geometry::Pnt_container<T> pnts
    {
       { 2.0f,  32.6f},
       { 2.5f,  34.4f},
